@@ -69,7 +69,7 @@ PC PC(
     .pc_o           (IF_pc)
 );
 
-MUX32 MUX_PC(
+MUX2 MUX_PC(
     .data1_i    (pc_4),
     .data2_i    (pc_branch),
     .select_i   (),
@@ -90,7 +90,8 @@ Instruction_Memory Instruction_Memory(
 IF_ID IF_ID(
     .addr_i         (IF_pc),
     .instr_i        (IF_instr),
-    .addr_o         (ID_instr)
+    .addr_o         (ID_pc),
+    .instr_o        (ID_instr)
 );
 
 Control Control(
@@ -167,7 +168,7 @@ ID_EX ID_EX(
     .RegWrite_o (EX_RegWrite)
 );
 
-MUX32 MUX_ALUSrc(
+MUX2 MUX_ALUSrc(
     .data1_i    (EX_RS2data),
     .data2_i    (EX_imm),
     .select_i   (EX_ALUSrc),
@@ -217,7 +218,7 @@ MEM_WB MEM_WB(
     .RegWrite_o     (WB_RegWrite),
 );
 
-MUX32 MUX_WBSrc(
+MUX2 MUX_WBSrc(
     .data1_i    (WB_ALUresult),
     .data2_i    (WB_readdata),
     .select_i   (WB_MemtoReg),
