@@ -3,7 +3,7 @@
 `include "Adder.v"
 `include "Instruction_Memory.v"
 `include "IF_ID.v"
-//`include "Control.v"
+`include "Control.v"
 `include "ALU_Control.v"
 `include "Registers.v"
 //`include "Sign_Extend.v"
