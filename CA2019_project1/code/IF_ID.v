@@ -3,8 +3,8 @@ module IF_ID
     input           clk_i,
     input   [31:0]  addr_i,
     input   [31:0]  instr_i,
-    input   [31:0]  addr_o,
-    input   [31:0]  instr_o
+    output   [31:0]  addr_o,
+    output   [31:0]  instr_o
 );
 
 reg     [31:0]     addr_o;

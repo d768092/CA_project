@@ -1,3 +1,4 @@
+`include "CPU.v"
 `define CYCLE_TIME 50            
 
 module TestBench;

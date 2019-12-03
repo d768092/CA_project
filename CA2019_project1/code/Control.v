@@ -21,7 +21,7 @@ output              RegWrite_o;
 // Read Data
 assign  Branch_o = Op_i[6];   
 assign  MemtoReg_o = ~Op_i[4];   
-assign  ALUOp_o[1] = (Op_i[5:4] == 2'b11) 1 : 0;
+assign  ALUOp_o[1] = (Op_i[5:4] == 2'b11)? 1 : 0;
 assign  ALUOp_o[0] = Op_i[6];
 assign  MemWrite_o = (Op_i[6:4] == 3'b010) ? 1 : 0; 
 assign  ALUSrc_o = (Op_i[5:4] == 2'b11) ? 0 : 1;

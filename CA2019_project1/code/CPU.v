@@ -30,12 +30,12 @@ input         start_i;
 PC PC(
     .clk_i          (clk_i),
     .start_i        (start_i),
-    .PCWrite_i      (),
+    .PCWrite_i      (1'b1),
     .pc_i           (MUX_PC.data_o),
     .pc_o           ()
 );
 
-MUX1_2 MUX_PC(
+MUX32_2 MUX_PC(
     .data1_i    (Add_PC.data_o),
     .data2_i    (Add_branch.data_o),
     .select_i   (),
@@ -72,7 +72,7 @@ Control Control(
 );
 
 ALU_Control ALU_Control(
-    .funct_i    ({IF_ID.instr_o[31:25],IF_ID.instr[14:12]}),
+    .funct_i    ({IF_ID.instr_o[31:25],IF_ID.instr_o[14:12]}),
     .ALUOp_i    (Control.ALUOp_o),
     .ALUCtrl_o  ()
 );
@@ -116,7 +116,7 @@ ID_EX ID_EX(
     .RS2data_i  (Registers.RS2data_o),
     .imm_i      (Sign_Extend.data_o),
     .RS1_i      (IF_ID.instr_o[19:15]),
-    .RS2_i      (IF_ID.instr_o[24:20])
+    .RS2_i      (IF_ID.instr_o[24:20]),
     .RD_i       (IF_ID.instr_o[11:7]),
     .MemtoReg_i (Control.MemtoReg_o),
     .ALUCtrl_i  (ALU_Control.ALUCtrl_o),
@@ -147,7 +147,7 @@ ALU ALU(
     .data1_i    (ID_EX.RS1data_o),
     .data2_i    (MUX_ALUSrc.data_o),
     .ALUCtrl_i  (ID_EX.ALUCtrl_o),
-    .data_o     (),
+    .data_o     ()
 );
 
 EX_MEM EX_MEM(
