@@ -17,7 +17,7 @@ assign  ALUCtrl[2] = funct_i[2];
 assign  ALUCtrl[1] = funct_i[3];
 assign  ALUCtrl[0] = funct_i[8];
 
-assign  ALUCtrl_o = (ALUOp_i!=3)? 0:
+assign  ALUCtrl_o = (ALUOp_i!=2'b10)? 0:
                     (funct_i[2]==1)? funct_i[2:0]:ALUCtrl;
    
 endmodule 
