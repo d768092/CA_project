@@ -1,12 +1,13 @@
 `include "PC.v"
-`include "MUX2.v"
+`include "MUX1_2.v"
+`include "MUX32_2.v"
 `include "Adder.v"
 `include "Instruction_Memory.v"
 `include "IF_ID.v"
 `include "Control.v"
 `include "ALU_Control.v"
 `include "Registers.v"
-//`include "Sign_Extend.v"
+`include "Sign_Extend.v"
 `include "Shift_left.v"
 `include "Equal.v"
 `include "ID_EX.v"
@@ -34,7 +35,7 @@ PC PC(
     .pc_o           ()
 );
 
-MUX2 MUX_PC(
+MUX1_2 MUX_PC(
     .data1_i    (Add_PC.data_o),
     .data2_i    (Add_branch.data_o),
     .select_i   (),
@@ -135,7 +136,7 @@ ID_EX ID_EX(
     .RegWrite_o ()
 );
 
-MUX2 MUX_ALUSrc(
+MUX32_2 MUX_ALUSrc(
     .data1_i    (ID_EX.RS2data_o),
     .data2_i    (ID_EX.imm_o),
     .select_i   (ID_EX.ALUSrc_o),
@@ -187,7 +188,7 @@ MEM_WB MEM_WB(
     .RegWrite_o     ()
 );
 
-MUX2 MUX_WBSrc(
+MUX32_2 MUX_WBSrc(
     .data1_i    (MEM_WB.ALU_o),
     .data2_i    (MEM_WB.data_o),
     .select_i   (MEM_WB.MemtoReg_o),
