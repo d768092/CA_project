@@ -19,17 +19,20 @@
 module CPU
 (
     clk_i, 
-    start_i
+    start_i,
+    rst_i
 );
 
 // Ports
 input         clk_i;
 input         start_i;
+input         rst_i;
 
 
 PC PC(
     .clk_i          (clk_i),
     .start_i        (start_i),
+    .rst_i          (rst_i),
     .PCWrite_i      (1'b1),
     .pc_i           (MUX_PC.data_o),
     .pc_o           ()
@@ -38,7 +41,7 @@ PC PC(
 MUX32_2 MUX_PC(
     .data1_i    (Add_PC.data_o),
     .data2_i    (Add_branch.data_o),
-    .select_i   (),
+    .select_i   (1'b0),
     .data_o     ()
 );
 

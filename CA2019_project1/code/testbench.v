@@ -5,6 +5,7 @@ module TestBench;
 
 reg                Clk;
 reg                Start;
+reg                Reset;
 integer            i, outfile, counter;
 integer            stall, flush;
 
@@ -12,10 +13,13 @@ always #(`CYCLE_TIME/2) Clk = ~Clk;
 
 CPU CPU(
     .clk_i  (Clk),
-    .start_i(Start)
+    .start_i(Start),
+    .rst_i(Reset)
 );
   
 initial begin
+    $dumpfile("TestBench.vcd");
+    $dumpvars;
     counter = 0;
     stall = 0;
     flush = 0;
@@ -36,22 +40,48 @@ initial begin
     end
 
     // TODO: initialize pipeline registers
-    
+    CPU.IF_ID.addr = 32'b0;
+    CPU.IF_ID.instr = 32'b0;
+    CPU.ID_EX.RS1data_o = 0;
+    CPU.ID_EX.RS2data_o = 0;
+    CPU.ID_EX.imm_o = 0;
+    CPU.ID_EX.RS1_o = 0;
+    CPU.ID_EX.RS2_o = 0;
+    CPU.ID_EX.RD_o = 0;
+    CPU.ID_EX.MemtoReg_o = 0;
+    CPU.ID_EX.ALUCtrl_o = 0;
+    CPU.ID_EX.MemWrite_o = 0;
+    CPU.ID_EX.ALUSrc_o = 0;
+    CPU.ID_EX.RegWrite_o = 0;
+    CPU.EX_MEM.ALU_o = 0;
+    CPU.EX_MEM.data_o = 0;
+    CPU.EX_MEM.RD_o = 0;
+    CPU.EX_MEM.MemtoReg_o = 0;
+    CPU.EX_MEM.MemWrite_o = 0;
+    CPU.EX_MEM.RegWrite_o = 0;
+    CPU.MEM_WB.ALU_o = 0;
+    CPU.MEM_WB.data_o = 0;
+    CPU.MEM_WB.RD_o = 0;
+    CPU.MEM_WB.MemtoReg_o = 0;
+    CPU.MEM_WB.RegWrite_o = 0;
+
     // Load instructions into instruction memory
     $readmemb("../testdata/instruction.txt", CPU.Instruction_Memory.memory);
     
     // Open output file
     outfile = $fopen("../testdata/output.txt") | 1;
+
+
     
     // Set Input n into data memory at 0x00
     CPU.Data_Memory.memory[0] = 8'h5;       // n = 5 for example
     
     Clk = 1;
-    //Reset = 0;
+    Reset = 0;
     Start = 0;
     
     #(`CYCLE_TIME/4) 
-    //Reset = 1;
+    Reset = 1;
     Start = 1;
         
     
