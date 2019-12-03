@@ -1,3 +1,20 @@
+`include "PC.v"
+`include "MUX2.v"
+`include "Adder.v"
+`include "Instruction_Memory.v"
+`include "IF_ID.v"
+//`include "Control.v"
+`include "ALU_Control.v"
+`include "Registers.v"
+//`include "Sign_Extend.v"
+`include "Shift_left.v"
+`include "Equal.v"
+`include "ID_EX.v"
+`include "ALU.v"
+`include "EX_MEM.v"
+`include "Data_Memory.v"
+`include "MEM_WB.v"
+
 module CPU
 (
     clk_i, 
