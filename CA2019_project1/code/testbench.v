@@ -55,8 +55,13 @@ initial begin
     Clk = 1;
     Reset = 0;
     Start = 0;
-
-    #1
+    
+    CPU.Control.Branch_o = 0;
+    CPU.Control.MemtoReg_o = 0;
+    CPU.Control.ALUOp_o = 0;
+    CPU.Control.MemWrite_o = 0;
+    CPU.Control.ALUSrc_o = 0;
+    CPU.Control.RegWrite_o = 0;
     CPU.IF_ID.addr_o = 0;
     CPU.IF_ID.instr_o = 0;
     CPU.ID_EX.RS1data_o = 0;
