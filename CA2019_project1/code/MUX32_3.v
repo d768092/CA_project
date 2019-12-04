@@ -18,6 +18,6 @@ output  [31:0]      data_o;
 // Read Data      
 assign  data_o = (select_i == 00)? data1_i :
 				 (select_i == 01)? data2_i :
-				 10;
+				 data3_i;
    
 endmodule 
