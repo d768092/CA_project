@@ -146,14 +146,14 @@ Forwarding Forwarding(
     .ID_EX_RS2          (ID_EX.RS2_o), 
     .EX_MEM_RD          (EX_MEM.RD_o),
     .MEM_WB_RD          (MEM_WB.RD_o),
-    .EX_MEM_RegWrite    (EX_MEM_RegWrite),  
-    .MEM_WB_RegWrite    (MEM_WB_RegWrite),
+    .EX_MEM_RegWrite    (EX_MEM.RegWrite_o),  
+    .MEM_WB_RegWrite    (MEM_WB.RegWrite_o),
     .Forward_A          (),
     .Forward_B          ()
 );
 
 MUX32_2 MUX_ALUSrc(
-    .data1_i    (ID_EX.RS2data_o),
+    .data1_i    (MUX_ALUFor_B.data_o),
     .data2_i    (ID_EX.imm_o),
     .select_i   (ID_EX.ALUSrc_o),
     .data_o     ()
@@ -168,7 +168,7 @@ MUX32_3 MUX_ALUFor_A(
 );
 
 MUX32_3 MUX_ALUFor_B(
-    .data1_i    (MUX_ALUSrc.data_o),
+    .data1_i    (ID_EX.RS2data_o),
     .data2_i    (MUX_WBSrc.data_o),
     .data3_i    (EX_MEM.ALU_o),
     .select_i   (Forwarding.Forward_B),
@@ -177,7 +177,7 @@ MUX32_3 MUX_ALUFor_B(
 
 
 ALU ALU(
-    .data1_i    (ID_EX.RS1data_o),
+    .data1_i    (MUX_ALUFor_A.data_o),
     .data2_i    (MUX_ALUSrc.data_o),
     .ALUCtrl_i  (ID_EX.ALUCtrl_o),
     .data_o     ()
