@@ -39,9 +39,26 @@ initial begin
         CPU.Registers.register[i] = 32'b0;
     end
 
-    // TODO: initialize pipeline registers
-    CPU.IF_ID.addr = 32'b0;
-    CPU.IF_ID.instr = 32'b0;
+    // TODO: initialize pipeline register
+
+    // Load instructions into instruction memory
+    $readmemb("../testdata/instruction.txt", CPU.Instruction_Memory.memory);
+    
+    // Open output file
+    outfile = $fopen("../testdata/output.txt") | 1;
+
+
+    
+    // Set Input n into data memory at 0x00
+    CPU.Data_Memory.memory[0] = 8'h5;       // n = 5 for example
+    
+    Clk = 1;
+    Reset = 0;
+    Start = 0;
+
+    #1
+    CPU.IF_ID.addr_o = 0;
+    CPU.IF_ID.instr_o = 0;
     CPU.ID_EX.RS1data_o = 0;
     CPU.ID_EX.RS2data_o = 0;
     CPU.ID_EX.imm_o = 0;
@@ -64,21 +81,6 @@ initial begin
     CPU.MEM_WB.RD_o = 0;
     CPU.MEM_WB.MemtoReg_o = 0;
     CPU.MEM_WB.RegWrite_o = 0;
-
-    // Load instructions into instruction memory
-    $readmemb("../testdata/instruction.txt", CPU.Instruction_Memory.memory);
-    
-    // Open output file
-    outfile = $fopen("../testdata/output.txt") | 1;
-
-
-    
-    // Set Input n into data memory at 0x00
-    CPU.Data_Memory.memory[0] = 8'h5;       // n = 5 for example
-    
-    Clk = 1;
-    Reset = 0;
-    Start = 0;
     
     #(`CYCLE_TIME/4) 
     Reset = 1;
