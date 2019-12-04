@@ -56,7 +56,7 @@ initial begin
     Reset = 0;
     Start = 0;
     
-    
+    #1
     CPU.Control.Branch_o = 0;
     CPU.Control.MemtoReg_o = 0;
     CPU.Control.ALUOp_o = 0;

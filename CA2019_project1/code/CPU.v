@@ -186,7 +186,7 @@ ALU ALU(
 EX_MEM EX_MEM(
     .clk_i      (clk_i),
     .ALU_i      (ALU.data_o),
-    .data_i     (ID_EX.RS2data_o),
+    .data_i     (MUX_ALUFor_B.data_o),
     .RD_i       (ID_EX.RD_o),
     .MemtoReg_i (ID_EX.MemtoReg_o),
     .MemWrite_i (ID_EX.MemWrite_o),
