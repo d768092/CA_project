@@ -1,10 +1,11 @@
 `include "PC.v"
-`include "MUX1_2.v"
 `include "MUX32_2.v"
 `include "Adder.v"
 `include "Instruction_Memory.v"
 `include "IF_ID.v"
+`include "HazardDetection.v"
 `include "Control.v"
+`include "Branch.v"
 `include "ALU_Control.v"
 `include "Registers.v"
 `include "Sign_Extend.v"
@@ -35,7 +36,7 @@ PC PC(
     .clk_i          (clk_i),
     .start_i        (start_i),
     .rst_i          (rst_i),
-    .PCWrite_i      (1'b1),
+    .PCWrite_i      (~HazardDetection.Stall_o),
     .pc_i           (MUX_PC.data_o),
     .pc_o           ()
 );
@@ -43,7 +44,7 @@ PC PC(
 MUX32_2 MUX_PC(
     .data1_i    (Add_PC.data_o),
     .data2_i    (Add_branch.data_o),
-    .select_i   (1'b0),
+    .select_i   (Branch.Branch_o),
     .data_o     ()
 );
 
@@ -62,18 +63,40 @@ IF_ID IF_ID(
     .clk_i          (clk_i),
     .addr_i         (PC.pc_o),
     .instr_i        (Instruction_Memory.instr_o),
+    .Flush_i        (HazardDetection.Flush_o),
+    .Stall_i        (HazardDetection.Stall_o),
+    .instr_pre      (HazardDetection.instr_o),
     .addr_o         (),
     .instr_o        ()
 );
 
+HazardDetection HazardDetection(
+    //stall
+    .MemtoReg_i     (ID_EX.MemtoReg_o),     //1 iff lw 
+    .RD_i           (ID_EX.RD_o),
+    .instr_i        (IF_ID.instr_o),
+    .Stall_o        (),
+    .instr_o        (),
+    //flush
+    .Branch_i       (Branch.Branch_o),
+    .Flush_o        ()
+);
+
 Control Control(
     .Op_i           (IF_ID.instr_o[6:0]),
+    .Stall_i        (HazardDetection.Stall_o),
     .Branch_o       (),
     .MemtoReg_o     (),
     .ALUOp_o        (),
     .MemWrite_o     (),
     .ALUSrc_o       (),
     .RegWrite_o     ()
+);
+
+Branch Branch(
+    .Branch_i       (Control.Branch_o),
+    .equal_i        (Equal.equal_o),
+    .Branch_o       ()
 );
 
 ALU_Control ALU_Control(

@@ -18,8 +18,8 @@ CPU CPU(
 );
   
 initial begin
-    $dumpfile("TestBench.vcd");
-    $dumpvars;
+    //$dumpfile("TestBench.vcd");
+    //$dumpvars;
     counter = 0;
     stall = 0;
     flush = 0;
@@ -57,12 +57,15 @@ initial begin
     Start = 0;
     
     #1
+    CPU.HazardDetection.Stall_o = 0;
+    CPU.HazardDetection.Flush_o = 0;
     CPU.Control.Branch_o = 0;
     CPU.Control.MemtoReg_o = 0;
     CPU.Control.ALUOp_o = 0;
     CPU.Control.MemWrite_o = 0;
     CPU.Control.ALUSrc_o = 0;
     CPU.Control.RegWrite_o = 0;
+    CPU.Branch.Branch_o = 0;
     CPU.IF_ID.addr_o = 0;
     CPU.IF_ID.instr_o = 0;
     CPU.ID_EX.RS1data_o = 0;
@@ -101,8 +104,8 @@ always@(posedge Clk) begin
         $finish;
 
     // TODO: put in your own signal to count stall and flush
-    // if(CPU.HazardDetection.Stall_o == 1 && CPU.Control.Branch_o == 0)stall = stall + 1;
-    // if(CPU.HazardDetection.Flush_o == 1)flush = flush + 1;  
+    if(CPU.HazardDetection.Stall_o == 1 && CPU.Control.Branch_o == 0)stall = stall + 1;
+    if(CPU.HazardDetection.Flush_o == 1)flush = flush + 1;  
    
 
     // print PC
