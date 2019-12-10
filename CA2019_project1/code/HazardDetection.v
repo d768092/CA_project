@@ -3,8 +3,10 @@ module HazardDetection(
     input         MemtoReg_i,    //1 iff lw 
     input  [4:0]  RD_i,
     input  [31:0] instr_i,
+    input  [31:0] addr_i,
     output        Stall_o,
     output [31:0] instr_o,
+    output [31:0] addr_o,
     //flush
     input         Branch_i,
     output        Flush_o
@@ -14,6 +16,7 @@ reg         Stall_o;
 reg         Flush_o;
 
 assign instr_o = instr_i;
+assign addr_o = addr_i;
 
 always @* begin
     Stall_o = 0;

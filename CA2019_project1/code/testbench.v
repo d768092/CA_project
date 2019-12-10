@@ -39,13 +39,15 @@ initial begin
         CPU.Registers.register[i] = 32'b0;
     end
 
-    // TODO: initialize pipeline register
-
     // Load instructions into instruction memory
     $readmemb("../testdata/instruction.txt", CPU.Instruction_Memory.memory);
+    // $readmemb("../testdata/Fibonacci_instruction.txt", CPU.Instruction_Memory.memory);
+    // $readmemb("../testdata/instruction2.txt", CPU.Instruction_Memory.memory);
     
     // Open output file
     outfile = $fopen("../testdata/output.txt") | 1;
+    // outfile = $fopen("../testdata/Fibonacci_output.txt") | 1;
+    // outfile = $fopen("../testdata/output2.txt") | 1;
 
 
     
@@ -57,6 +59,7 @@ initial begin
     Start = 0;
     
     #1
+    // initialize pipeline register
     CPU.HazardDetection.Stall_o = 0;
     CPU.HazardDetection.Flush_o = 0;
     CPU.Control.Branch_o = 0;
@@ -103,13 +106,13 @@ always@(posedge Clk) begin
     if(counter == 30)    // stop after 30 cycles
         $finish;
 
-    // TODO: put in your own signal to count stall and flush
+    // put in your own signal to count stall and flush
     if(CPU.HazardDetection.Stall_o == 1 && CPU.Control.Branch_o == 0)stall = stall + 1;
     if(CPU.HazardDetection.Flush_o == 1)flush = flush + 1;  
    
 
     // print PC
-    $fdisplay(outfile, "cycle = %d, Start = %d, Stall = %d, Flush = %d\nPC = %d", counter, Start, stall, flush, CPU.PC.pc_o);
+    $fdisplay(outfile, "cycle = %d, Start = %d, Stall = %0d, Flush = %0d\nPC = %d", counter, Start, stall, flush, CPU.PC.pc_o);
     
     // print Registers
     $fdisplay(outfile, "Registers");

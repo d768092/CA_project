@@ -12,6 +12,6 @@ output  [31:0]      data_o;
 
 
 // Read Data      
-assign  data_o = data1_in+data2_in;
+assign  data_o = data1_in + data2_in;
    
 endmodule 
