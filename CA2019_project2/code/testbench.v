@@ -1,3 +1,5 @@
+`include "CPU.v"
+`include "Data_Memory.v"
 `define CYCLE_TIME 50
 
 module TestBench;
@@ -83,6 +85,43 @@ initial begin
     Clk = 1;
     Reset = 0;
     Start = 0;
+    // initialize pipeline register
+    CPU.HazardDetection.Stall_o = 0;
+    CPU.HazardDetection.Flush_o = 0;
+    CPU.Control.Branch_o = 0;
+    CPU.Control.MemtoReg_o = 0;
+    CPU.Control.ALUOp_o = 0;
+    CPU.Control.MemWrite_o = 0;
+    CPU.Control.MemRead_o = 0;
+    CPU.Control.ALUSrc_o = 0;
+    CPU.Control.RegWrite_o = 0;
+    CPU.Branch.Branch_o = 0;
+    CPU.IF_ID.addr_o = 0;
+    CPU.IF_ID.instr_o = 0;
+    CPU.ID_EX.RS1data_o = 0;
+    CPU.ID_EX.RS2data_o = 0;
+    CPU.ID_EX.imm_o = 0;
+    CPU.ID_EX.RS1_o = 0;
+    CPU.ID_EX.RS2_o = 0;
+    CPU.ID_EX.RD_o = 0;
+    CPU.ID_EX.MemtoReg_o = 0;
+    CPU.ID_EX.ALUCtrl_o = 0;
+    CPU.ID_EX.MemWrite_o = 0;
+    CPU.ID_EX.MemRead_o = 0;
+    CPU.ID_EX.ALUSrc_o = 0;
+    CPU.ID_EX.RegWrite_o = 0;
+    CPU.EX_MEM.ALU_o = 0;
+    CPU.EX_MEM.data_o = 0;
+    CPU.EX_MEM.RD_o = 0;
+    CPU.EX_MEM.MemtoReg_o = 0;
+    CPU.EX_MEM.MemWrite_o = 0;
+    CPU.EX_MEM.MemRead_o = 0;
+    CPU.EX_MEM.RegWrite_o = 0;
+    CPU.MEM_WB.ALU_o = 0;
+    CPU.MEM_WB.data_o = 0;
+    CPU.MEM_WB.RD_o = 0;
+    CPU.MEM_WB.MemtoReg_o = 0;
+    CPU.MEM_WB.RegWrite_o = 0;
     
     #(`CYCLE_TIME/4) 
     Reset = 1;
