@@ -59,8 +59,8 @@ PC PC
 	.rst_i      (rst_i),
 	.start_i    (start_i),
 	.MemStall_i (dcache.p1_stall_o),
-	.PCWrite_i  (),
-	.pc_i       (),
+	.PCWrite_i  (~HazardDetection.Stall_o),
+	.pc_i       (MUX_PC.data_o),
 	.pc_o       ()
 );
 
@@ -78,7 +78,7 @@ Adder Add_PC(
 );
 
 Instruction_Memory Instruction_Memory(
-	.addr_i     (), 
+	.addr_i     (PC.pc_o), 
 	.instr_o    ()
 );
 
@@ -135,11 +135,11 @@ ALU_Control ALU_Control(
 
 Registers Registers(
 	.clk_i      (clk_i),
-	.RS1addr_i  (),
-	.RS2addr_i  (),
-	.RDaddr_i   (), 
-	.RDdata_i   (),
-	.RegWrite_i (), 
+	.RS1addr_i  (IF_ID.instr_o[19:15]),
+	.RS2addr_i  (IF_ID.instr_o[24:20]),
+	.RDaddr_i   (MEM_WB.RD_o), 
+	.RDdata_i   (MUX_WBSrc.data_o),
+	.RegWrite_i (MEM_WB.RegWrite_o), 
 	.RS1data_o  (), 
 	.RS2data_o  () 
 );
