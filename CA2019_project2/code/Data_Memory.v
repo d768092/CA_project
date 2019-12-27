@@ -55,7 +55,7 @@ always@(posedge clk_i) begin
             end
             STATE_WAIT: begin
                 // TODO
-                if(count == 4'd6) begin    
+                if(count == 4'd9) begin    
                     state <= STATE_IDLE;
                 end
                 else begin
@@ -89,7 +89,7 @@ always@(posedge clk_i) begin
 end
 
 // TODO
-assign ack = (state == STATE_WAIT) && (count == 4'd6);
+assign ack = (state == STATE_WAIT) && (count == 4'd9);
 
 always@(posedge clk_i) begin
     if(~rst_i) begin

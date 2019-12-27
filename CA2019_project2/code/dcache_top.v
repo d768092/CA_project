@@ -112,8 +112,8 @@ assign    cache_sram_data   = (hit) ? w_hit_data : mem_data_i;
 
 // memory interface
 assign    mem_enable_o = mem_enable;
-assign    mem_addr_o   = {sram_tag, p1_index, 5'b0};
-//assign    mem_addr_o   = (write_back) ? {sram_tag, p1_index, 5'b0} : {p1_tag, p1_index, 5'b0};
+//assign    mem_addr_o   = {sram_tag, p1_index, 5'b0};
+assign    mem_addr_o   = (write_back) ? {sram_tag, p1_index, 5'b0} : {p1_tag, p1_index, 5'b0};
 assign    mem_data_o   = sram_cache_data;
 assign    mem_write_o  = mem_write;
 
@@ -129,6 +129,8 @@ integer i, j;
 // read data :  256-bit to 32-bit
 always@(p1_offset or r_hit_data) begin
     // TODO: add you code here! (p1_data=...?)
+    p1_data = r_hit_data[p1_offset*8 +:32];
+    /*
     for(i=0; i<32; i=i+4) begin
         if(i==p1_offset) begin
             // fuck
@@ -136,18 +138,22 @@ always@(p1_offset or r_hit_data) begin
                 p1_data[j] = r_hit_data[i*8+j];
         end
     end
+    */
 end
 
 // write data :  32-bit to 256-bit
 always@(p1_offset or r_hit_data or p1_data_i) begin
     // TODO: add you code here! (w_hit_data=...?)
     w_hit_data = sram_cache_data;
+    w_hit_data[p1_offset*8 +:32] = p1_data_i;
+    /*
     for(i=0; i<32; i=i+4) begin
         if(i==p1_offset) begin
             for(j=0; j<32; j++)
                 w_hit_data[i*8+j] = p1_data_i[j];
         end
     end
+    */
 end
 
 
@@ -164,7 +170,6 @@ always@(posedge clk_i or negedge rst_i) begin
         case(state)        
             STATE_IDLE: begin
                 if(p1_req && !hit) begin      //wait for request
-                    //mem_enable <= 1'b1;
                     state <= STATE_MISS;
                 end
                 else begin
@@ -176,12 +181,17 @@ always@(posedge clk_i or negedge rst_i) begin
                     // TODO: add you code here!
                     mem_enable <= 1'b1;
                     mem_write <= 1'b1;
+                    cache_we <= 1'b0;
+                    write_back <= 1'b1;
                     //write_back <= 1'b1;
                     state <= STATE_WRITEBACK;
                 end
                 else begin                    //write allocate: write miss = read miss + write hit; read miss = read miss + read hit
                     // TODO: add you code here! 
                     mem_enable <= 1'b1;
+                    mem_write <= 1'b0;
+                    cache_we <= 1'b0;
+                    write_back <= 1'b0;
                     state <= STATE_READMISS;
                 end
             end
@@ -189,28 +199,31 @@ always@(posedge clk_i or negedge rst_i) begin
                 if(mem_ack_i) begin            //wait for data memory acknowledge
                     // TODO: add you code here! 
                     mem_enable <= 1'b0;
+                    mem_write <= 1'b0;
                     cache_we <= 1'b1;
+                    write_back <= 1'b1;
                     state <= STATE_READMISSOK;
                 end
                 else begin
-                    cache_we <= 1'b0;
                     state <= STATE_READMISS;
                 end
             end
             STATE_READMISSOK: begin            //wait for data memory acknowledge
                 // TODO: add you code here! 
-                //mem_enable <= 1'b0;
-                cache_we   <= 1'b0; 
+                mem_enable <= 1'b0;
+                mem_write <= 1'b0;
+                cache_we   <= 1'b0;
+                write_back <= 1'b0;
                 //write_back <= 1'b0;
                 state <= STATE_IDLE;
             end
             STATE_WRITEBACK: begin
                 if(mem_ack_i) begin            //wait for data memory acknowledge
-                    // TODO: add you code here! 
+                    // TODO: add you code here!
+                    mem_enable = 1'b1; 
                     mem_write <= 1'b0;
-                    cache_we <= 1'b1;
-                    // mem_enable = 1'b0;
-                    // mem_enable = 1'b1;
+                    cache_we <= 1'b0;
+                    write_back <= 1'b0;
                     state <= STATE_READMISS;
                 end
                 else begin
