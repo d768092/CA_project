@@ -33,7 +33,7 @@ always@(posedge clk_i or negedge rst_i) begin
                 pc_o <= pc_i;
         end
         else
-            pc_o <= 32'b0;
+            pc_o <= pc_o;
     end
 end
 

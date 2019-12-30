@@ -201,7 +201,7 @@ always@(posedge clk_i or negedge rst_i) begin
                     mem_enable <= 1'b0;
                     mem_write <= 1'b0;
                     cache_we <= 1'b1;
-                    write_back <= 1'b1;
+                    write_back <= 1'b0;
                     state <= STATE_READMISSOK;
                 end
                 else begin
