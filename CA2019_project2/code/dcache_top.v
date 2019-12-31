@@ -133,7 +133,6 @@ always@(p1_offset or r_hit_data) begin
     /*
     for(i=0; i<32; i=i+4) begin
         if(i==p1_offset) begin
-            // fuck
             for(j=0; j<32; j++)
                 p1_data[j] = r_hit_data[i*8+j];
         end
